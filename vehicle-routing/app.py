@@ -945,6 +945,7 @@ class VRPApp(QMainWindow):
                     route_distance += math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
                 
                 # Calculate load percentage
+                load_percentage = (route_demand / capacity) * 100
                 load_color = "#10b981"  # Green for low utilization
                 if load_percentage > 90:
                     load_color = "#ef4444"  # Red for high utilization
