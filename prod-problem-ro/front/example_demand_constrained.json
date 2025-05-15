@@ -92,5 +92,9 @@
       "product_name": "Product C",
       "min_demand": 10
     }
-  ]
+  ],
+  "total_constraints": {
+    "min_total": 50.0,
+    "max_total": 80.0
+  }
 }
