@@ -3,12 +3,12 @@
     "name": "Production Optimizer",
     "description": "Optimize production planning with resource constraints",
     "icon": "icons/production.png",
-    "path": "prod-problem-ro\\prod-problem-r-o-front\\app.py"
+    "path": "prod-problem-ro\\front\\app.py"
   },
   "vehicle_routing": {
     "name": "Vehicle Routing Problem Solver",
     "description": "Optimize vehicle routing with resource constraints",
     "icon": "icons/vehicle-routing.png",
-    "path": "vehicle-routing-RO\\app.py"
+    "path": "vehicle-routing\\app.py"
   }
 }
