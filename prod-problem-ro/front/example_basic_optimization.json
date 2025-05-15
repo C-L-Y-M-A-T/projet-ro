@@ -59,17 +59,6 @@
       "usage_per_unit": 4.0
     }
   ],
-  "demand_constraints": [
-    {
-      "product_name": "Product A",
-      "min_demand": 5.0,
-      "max_demand": 25.0
-    },
-    {
-      "product_name": "Product B",
-      "min_demand": 10.0
-    }
-  ],
   "total_constraints": {
     "min_total": 50.0,
     "max_total": 80.0

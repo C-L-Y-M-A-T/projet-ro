@@ -21,7 +21,7 @@ import os
 API_BASE_URL = "http://localhost:5000"
 
 # Define allowed optimizer types
-ALLOWED_OPTIMIZERS = ["demand-constrained-production", "basic-production"]
+ALLOWED_OPTIMIZERS = ["demand-constrained", "basic-production"]
 
 class OptimizationThread(QThread):
     """Thread for running optimization requests without blocking the UI"""
@@ -365,7 +365,7 @@ class ProductsTableWidget(ModernTableWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setColumnCount(3)
-        self.setHorizontalHeaderLabels(["Product Name", "Profit per Unit", "Cost per Unit"])
+        self.setHorizontalHeaderLabels(["Product Name", "Price per Unit", "Cost per Unit"])
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
@@ -1226,7 +1226,7 @@ class MainWindow(QMainWindow):
         demand_constraints = self.demand_constraints_table.get_demand_constraints_data()
         if demand_constraints:
             # Switch to demand-constrained-production
-            index = self.optimizer_combo.findText("demand-constrained-production")
+            index = self.optimizer_combo.findText("demand-constrained")
             if index >= 0 and self.optimizer_combo.currentText() == "basic-production":
                 self.optimizer_combo.setCurrentIndex(index)
                 self.statusBar().showMessage("Switched to demand-constrained optimizer due to demand constraints", 5000)
@@ -1301,19 +1301,32 @@ class MainWindow(QMainWindow):
             
     def load_example(self):
         """Load example data"""
-        options = ["Demand Constrained"]
-        selected, ok = QInputDialog.getItem(self, "Select Example", 
-                                          "Choose an example:", options, 0, False)
+        import os
+        
+        # Get the directory of the current script file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        options = ["Demand Constrained", "Basic Production"]
+        selected, ok = QInputDialog.getItem(self, "Select Example",
+                                        "Choose an example:", options, 0, False)
         if ok and selected:
             try:
-                with open("example_demand_constrained.json", "r") as f:
+                if selected == "Demand Constrained":
+                    filename = "example_demand_constrained.json"
+                elif selected == "Basic Production":
+                    filename = "example_basic_optimization.json"
+                
+                # Create absolute file path
+                filepath = os.path.join(current_dir, filename)
+                
+                with open(filepath, "r") as f:
                     data = json.load(f)
-                        
+                    
                 self.set_input_data(data)
                 self.statusBar().showMessage(f"Loaded {selected} example")
             except Exception as e:
                 QMessageBox.warning(self, "Error", f"Failed to load example: {str(e)}")
-                
+
     def save_data(self):
         """Save current input data to file"""
         file_path, _ = QFileDialog.getSaveFileName(self, "Save Data", "", "JSON Files (*.json)")
@@ -1352,7 +1365,7 @@ class MainWindow(QMainWindow):
                 
             # Check if we need to switch optimizer type
             if "demand_constraints" in data and optimizer_type == "basic-production":
-                optimizer_type = "demand-constrained-production"
+                optimizer_type = "demand-constrained"
                 index = self.optimizer_combo.findText(optimizer_type)
                 if index >= 0:
                     self.optimizer_combo.setCurrentIndex(index)
